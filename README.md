@@ -1,3 +1,8 @@
+[![GitHub Actions](https://github.com/hana-da/rack-content_disposition_helper/actions/workflows/test.yml/badge.svg)](https://github.com/hana-da/rack-content_disposition_helper/actions/workflows/test.yml)
+[![Maintainability](https://api.codeclimate.com/v1/badges/27559fca466cbad7698d/maintainability)](https://codeclimate.com/github/hana-da/rack-content_disposition_helper/maintainability)
+[![Gem Version](https://badge.fury.io/rb/rack-content_disposition_helper.svg)](https://badge.fury.io/rb/rack-content_disposition_helper)
+[![GitHub](https://img.shields.io/github/license/hana-da/rack-content_disposition_helper)](https://github.com/hana-da/rack-content_disposition_helper/blob/main/MIT-LICENSE)
+
 # Rack::ContentDispositionHelper
 
 Rack::ContentDispositionHelper is Rack middleware that rewrites the decoded `filename*` directive in the Content-Disposition response header as the value of the `filename` directive.
