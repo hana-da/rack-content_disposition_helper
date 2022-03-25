@@ -5,13 +5,18 @@ RSpec.describe Rack::ContentDispositionHelper::ContentDisposition, type: :lib do
     {
       long:  {
         raw:      'なんかしらんけどContent-Dispositionの値が255Byte以上やとあかんのやて',
-        asterisk: "filename*=UTF-8''%E3%81%AA%E3%82%93%E3%81%8B%E3%81%97%E3%82%89%E3%82%93%E3%81" \
+        raw_utf8: 'filename="なんかしらんけどContent-Dispositionの値が255Byte以上やとあかんのやて"',
+        ascii:    'filename="%3F%3F%3F%3F%3F%3F%3F%3FContent-Disposition%3F%3F%3F255Byte%3F%3F' \
+                  '%3F%3F%3F%3F%3F%3F%3F%3F"',
+        utf8:     "filename*=UTF-8''%E3%81%AA%E3%82%93%E3%81%8B%E3%81%97%E3%82%89%E3%82%93%E3%81" \
                   '%91%E3%81%A9Content-Disposition%E3%81%AE%E5%80%A4%E3%81%8C255Byte%E4%BB%A5%E4' \
                   '%B8%8A%E3%82%84%E3%81%A8%E3%81%82%E3%81%8B%E3%82%93%E3%81%AE%E3%82%84%E3%81%A6',
       },
       short: {
         raw:      'これなら問題ないんだけどね',
-        asterisk: "filename*=UTF-8''%E3%81%93%E3%82%8C%E3%81%AA%E3%82%89%E5%95%8F%E9%A1%8C%E3%81" \
+        raw_utf8: 'filename="これなら問題ないんだけどね"',
+        ascii:    'filename="%3F%3F%3F%3F%3F%3F%3F%3F%3F%3F%3F%3F%3F"',
+        utf8:     "filename*=UTF-8''%E3%81%93%E3%82%8C%E3%81%AA%E3%82%89%E5%95%8F%E9%A1%8C%E3%81" \
                   '%AA%E3%81%84%E3%82%93%E3%81%A0%E3%81%91%E3%81%A9%E3%81%AD',
       },
     }
@@ -19,42 +24,49 @@ RSpec.describe Rack::ContentDispositionHelper::ContentDisposition, type: :lib do
 
   let(:content_disposition_value) do
     {
-      long:  "attachment; filename=\"#{filename[:long][:encoded]}\"; #{filename[:long][:asterisk]}",
-      short: "attachment; filename=\"#{filename[:short][:encoded]}\"; #{filename[:short][:asterisk]}",
-    }
-  end
-
-  let(:content_disposition) do
-    {
-      long:  Rack::ContentDispositionHelper::ContentDisposition.new(content_disposition_value[:long]),
-      short: Rack::ContentDispositionHelper::ContentDisposition.new(content_disposition_value[:short]),
-      empty: Rack::ContentDispositionHelper::ContentDisposition.new(''),
-      nil:   Rack::ContentDispositionHelper::ContentDisposition.new(nil),
+      long:  "attachment; #{filename[:long][:ascii]}; #{filename[:long][:utf8]}",
+      short: "attachment; #{filename[:short][:ascii]}; #{filename[:short][:utf8]}",
     }
   end
 
   describe '#long?' do
     context 'when value is long' do
       it do
-        expect(content_disposition[:long]).to be_long
+        content_disposition =
+          Rack::ContentDispositionHelper::ContentDisposition.new(
+            content_disposition_value[:long],
+          )
+
+        expect(content_disposition).to be_long
       end
     end
 
-    context 'when value is not long' do
+    context 'when value is short' do
       it do
-        expect(content_disposition[:short]).not_to be_long
+        content_disposition =
+          Rack::ContentDispositionHelper::ContentDisposition.new(
+            content_disposition_value[:short],
+          )
+
+        expect(content_disposition).not_to be_long
       end
     end
 
     context 'when value is empty' do
       it do
-        expect(content_disposition[:empty]).not_to be_long
+        content_disposition =
+          Rack::ContentDispositionHelper::ContentDisposition.new('')
+
+        expect(content_disposition).not_to be_long
       end
     end
 
     context 'when value is nil' do
       it do
-        expect(content_disposition[:nil]).not_to be_long
+        content_disposition =
+          Rack::ContentDispositionHelper::ContentDisposition.new(nil)
+
+        expect(content_disposition).not_to be_long
       end
     end
   end
@@ -62,25 +74,41 @@ RSpec.describe Rack::ContentDispositionHelper::ContentDisposition, type: :lib do
   describe '#disposition' do
     context 'when value is long' do
       it do
-        expect(content_disposition[:long].disposition).to eq('attachment;')
+        content_disposition =
+          Rack::ContentDispositionHelper::ContentDisposition.new(
+            content_disposition_value[:long],
+          )
+
+        expect(content_disposition.disposition).to eq('attachment;')
       end
     end
 
-    context 'when value is not long' do
+    context 'when value is short' do
       it do
-        expect(content_disposition[:short].disposition).to eq('attachment;')
+        content_disposition =
+          Rack::ContentDispositionHelper::ContentDisposition.new(
+            content_disposition_value[:short],
+          )
+
+        expect(content_disposition.disposition).to eq('attachment;')
       end
     end
 
     context 'when value is empty' do
       it do
-        expect(content_disposition[:empty].disposition).to be_nil
+        content_disposition =
+          Rack::ContentDispositionHelper::ContentDisposition.new('')
+
+        expect(content_disposition.disposition).to be_nil
       end
     end
 
     context 'when value is nil' do
       it do
-        expect(content_disposition[:nil].disposition).to be_nil
+        content_disposition =
+          Rack::ContentDispositionHelper::ContentDisposition.new(nil)
+
+        expect(content_disposition.disposition).to be_nil
       end
     end
   end
@@ -88,29 +116,45 @@ RSpec.describe Rack::ContentDispositionHelper::ContentDisposition, type: :lib do
   describe '#raw_filename_value' do
     context 'when value is long' do
       it do
-        expect(content_disposition[:long].raw_filename_value).to eq(
-          "attachment; filename=\"#{filename[:long][:raw]}\"",
+        content_disposition =
+          Rack::ContentDispositionHelper::ContentDisposition.new(
+            content_disposition_value[:long],
+          )
+
+        expect(content_disposition.raw_filename_value).to eq(
+          "attachment; #{filename[:long][:raw_utf8]}",
         )
       end
     end
 
-    context 'when value is not long' do
+    context 'when value is short' do
       it do
-        expect(content_disposition[:short].raw_filename_value).to eq(
-          "attachment; filename=\"#{filename[:short][:raw]}\"",
+        content_disposition =
+          Rack::ContentDispositionHelper::ContentDisposition.new(
+            content_disposition_value[:short],
+          )
+
+        expect(content_disposition.raw_filename_value).to eq(
+          "attachment; #{filename[:short][:raw_utf8]}",
         )
       end
     end
 
     context 'when value is empty' do
       it do
-        expect(content_disposition[:empty].raw_filename_value).to be_nil
+        content_disposition =
+          Rack::ContentDispositionHelper::ContentDisposition.new('')
+
+        expect(content_disposition.raw_filename_value).to be_nil
       end
     end
 
     context 'when value is nil' do
       it do
-        expect(content_disposition[:nil].raw_filename_value).to be_nil
+        content_disposition =
+          Rack::ContentDispositionHelper::ContentDisposition.new(nil)
+
+        expect(content_disposition.raw_filename_value).to be_nil
       end
     end
   end
@@ -118,25 +162,41 @@ RSpec.describe Rack::ContentDispositionHelper::ContentDisposition, type: :lib do
   describe '#raw_filename' do
     context 'when value is long' do
       it do
-        expect(content_disposition[:long].raw_filename).to eq(filename[:long][:raw])
+        content_disposition =
+          Rack::ContentDispositionHelper::ContentDisposition.new(
+            content_disposition_value[:long],
+          )
+
+        expect(content_disposition.raw_filename).to eq(filename[:long][:raw])
       end
     end
 
-    context 'when value is not long' do
+    context 'when value is short' do
       it do
-        expect(content_disposition[:short].raw_filename).to eq(filename[:short][:raw])
+        content_disposition =
+          Rack::ContentDispositionHelper::ContentDisposition.new(
+            content_disposition_value[:short],
+          )
+
+        expect(content_disposition.raw_filename).to eq(filename[:short][:raw])
       end
     end
 
     context 'when value is empty' do
       it do
-        expect(content_disposition[:empty].raw_filename).to be_nil
+        content_disposition =
+          Rack::ContentDispositionHelper::ContentDisposition.new('')
+
+        expect(content_disposition.raw_filename).to be_nil
       end
     end
 
     context 'when value is nil' do
       it do
-        expect(content_disposition[:nil].raw_filename).to be_nil
+        content_disposition =
+          Rack::ContentDispositionHelper::ContentDisposition.new(nil)
+
+        expect(content_disposition.raw_filename).to be_nil
       end
     end
   end
@@ -144,25 +204,41 @@ RSpec.describe Rack::ContentDispositionHelper::ContentDisposition, type: :lib do
   describe '#filename_asterisk' do
     context 'when value is long' do
       it do
-        expect(content_disposition[:long].filename_asterisk).to eq(filename[:long][:asterisk])
+        content_disposition =
+          Rack::ContentDispositionHelper::ContentDisposition.new(
+            content_disposition_value[:long],
+          )
+
+        expect(content_disposition.filename_asterisk).to eq(filename[:long][:utf8])
       end
     end
 
-    context 'when value is not long' do
+    context 'when value is short' do
       it do
-        expect(content_disposition[:short].filename_asterisk).to eq(filename[:short][:asterisk])
+        content_disposition =
+          Rack::ContentDispositionHelper::ContentDisposition.new(
+            content_disposition_value[:short],
+          )
+
+        expect(content_disposition.filename_asterisk).to eq(filename[:short][:utf8])
       end
     end
 
     context 'when value is empty' do
       it do
-        expect(content_disposition[:empty].filename_asterisk).to be_nil
+        content_disposition =
+          Rack::ContentDispositionHelper::ContentDisposition.new('')
+
+        expect(content_disposition.filename_asterisk).to be_nil
       end
     end
 
     context 'when value is nil' do
       it do
-        expect(content_disposition[:nil].filename_asterisk).to be_nil
+        content_disposition =
+          Rack::ContentDispositionHelper::ContentDisposition.new(nil)
+
+        expect(content_disposition.filename_asterisk).to be_nil
       end
     end
   end
