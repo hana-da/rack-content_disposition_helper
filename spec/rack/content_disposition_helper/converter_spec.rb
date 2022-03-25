@@ -29,12 +29,12 @@ RSpec.describe Rack::ContentDispositionHelper::Converter, type: :lib do
     }
   end
 
-  describe '#long?' do
+  describe '#length_limit_exceeded?' do
     context 'when value is long' do
       it do
         converter = Rack::ContentDispositionHelper::Converter.new(content_disposition_value[:long])
 
-        expect(converter).to be_long
+        expect(converter).to be_length_limit_exceeded
       end
     end
 
@@ -42,7 +42,7 @@ RSpec.describe Rack::ContentDispositionHelper::Converter, type: :lib do
       it do
         converter = Rack::ContentDispositionHelper::Converter.new(content_disposition_value[:short])
 
-        expect(converter).not_to be_long
+        expect(converter).not_to be_length_limit_exceeded
       end
     end
 
@@ -50,7 +50,7 @@ RSpec.describe Rack::ContentDispositionHelper::Converter, type: :lib do
       it do
         converter = Rack::ContentDispositionHelper::Converter.new('')
 
-        expect(converter).not_to be_long
+        expect(converter).not_to be_length_limit_exceeded
       end
     end
 
@@ -58,7 +58,7 @@ RSpec.describe Rack::ContentDispositionHelper::Converter, type: :lib do
       it do
         converter = Rack::ContentDispositionHelper::Converter.new(nil)
 
-        expect(converter).not_to be_long
+        expect(converter).not_to be_length_limit_exceeded
       end
     end
   end

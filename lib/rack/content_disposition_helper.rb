@@ -19,7 +19,7 @@ module Rack
       user_agent = UserAgent.new(env)
       converter = Converter.new(headers['Content-Disposition'])
 
-      if converter.long? && user_agent.safari?
+      if converter.length_limit_exceeded? && user_agent.safari?
         headers = headers.merge('Content-Disposition' => converter.raw_filename_value)
       end
 

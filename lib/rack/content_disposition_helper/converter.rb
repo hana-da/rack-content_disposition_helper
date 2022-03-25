@@ -15,7 +15,7 @@ module Rack
         @parts = value&.split
       end
 
-      def long?
+      def length_limit_exceeded?
         return nil unless value
 
         value.length > LIMIT
