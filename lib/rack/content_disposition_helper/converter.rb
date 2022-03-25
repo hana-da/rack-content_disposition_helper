@@ -4,7 +4,7 @@ require 'cgi'
 
 module Rack
   class ContentDispositionHelper
-    class ContentDisposition
+    class Converter
       LIMIT = 254
       FILENAME_ASTERISK_PREFIX = "filename*=UTF-8''"
 
