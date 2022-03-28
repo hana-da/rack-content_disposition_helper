@@ -26,13 +26,13 @@ module Rack
       end
 
       def convert
-        return unless disposition
+        return value if !disposition || !raw_filename
 
         "#{disposition} filename=\"#{raw_filename}\""
       end
 
       def raw_filename
-        filename_asterisk&.then { |v| CGI.unescape(v).delete_prefix!(FILENAME_ASTERISK_PREFIX) }
+        @raw_filename ||= filename_asterisk&.then { |v| CGI.unescape(v).delete_prefix!(FILENAME_ASTERISK_PREFIX) }
       end
 
       def filename_asterisk

@@ -114,11 +114,27 @@ RSpec.describe Rack::ContentDispositionHelper::Converter, type: :lib do
       end
     end
 
+    context 'when value is disposition only' do
+      it do
+        converter = Rack::ContentDispositionHelper::Converter.new('inline')
+
+        expect(converter.convert).to eq('inline')
+      end
+    end
+
+    context 'when value is ascii filename' do
+      it do
+        converter = Rack::ContentDispositionHelper::Converter.new('attachment; filename="ascii.txt"')
+
+        expect(converter.convert).to eq('attachment; filename="ascii.txt"')
+      end
+    end
+
     context 'when value is empty' do
       it do
         converter = Rack::ContentDispositionHelper::Converter.new('')
 
-        expect(converter.convert).to be_nil
+        expect(converter.convert).to eq('')
       end
     end
 
