@@ -52,6 +52,8 @@ For Sinatra and other Rack apps, add this to config.ru:
 
 ```ruby
 # config.ru
+
+# Bundler.require or require 'rack/content_disposition_helper'
 use Rack::ContentDispositionHelper
 ```
 
