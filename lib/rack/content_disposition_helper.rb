@@ -20,7 +20,7 @@ module Rack
       converter = Converter.new(headers['Content-Disposition'])
 
       if converter.length_limit_exceeded? && user_agent.safari?
-        headers = headers.merge('Content-Disposition' => converter.raw_filename_value)
+        headers = headers.merge('Content-Disposition' => converter.convert)
       end
 
       [status_code, headers, body]

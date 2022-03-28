@@ -97,12 +97,12 @@ RSpec.describe Rack::ContentDispositionHelper::Converter, type: :lib do
     end
   end
 
-  describe '#raw_filename_value' do
+  describe '#convert' do
     context 'when value is long' do
       it do
         converter = Rack::ContentDispositionHelper::Converter.new(content_disposition_value[:long])
 
-        expect(converter.raw_filename_value).to eq("attachment; #{filename[:long][:raw_utf8]}")
+        expect(converter.convert).to eq("attachment; #{filename[:long][:raw_utf8]}")
       end
     end
 
@@ -110,7 +110,7 @@ RSpec.describe Rack::ContentDispositionHelper::Converter, type: :lib do
       it do
         converter = Rack::ContentDispositionHelper::Converter.new(content_disposition_value[:short])
 
-        expect(converter.raw_filename_value).to eq("attachment; #{filename[:short][:raw_utf8]}")
+        expect(converter.convert).to eq("attachment; #{filename[:short][:raw_utf8]}")
       end
     end
 
@@ -118,7 +118,7 @@ RSpec.describe Rack::ContentDispositionHelper::Converter, type: :lib do
       it do
         converter = Rack::ContentDispositionHelper::Converter.new('')
 
-        expect(converter.raw_filename_value).to be_nil
+        expect(converter.convert).to be_nil
       end
     end
 
@@ -126,7 +126,7 @@ RSpec.describe Rack::ContentDispositionHelper::Converter, type: :lib do
       it do
         converter = Rack::ContentDispositionHelper::Converter.new(nil)
 
-        expect(converter.raw_filename_value).to be_nil
+        expect(converter.convert).to be_nil
       end
     end
   end

@@ -25,7 +25,7 @@ module Rack
         parts&.first
       end
 
-      def raw_filename_value
+      def convert
         return unless disposition
 
         "#{disposition} filename=\"#{raw_filename}\""
