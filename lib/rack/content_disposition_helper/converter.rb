@@ -8,17 +8,17 @@ module Rack
       LIMIT = 254
       FILENAME_ASTERISK_PREFIX = "filename*=UTF-8''"
 
-      attr_reader :value, :parts
+      attr_reader :original_value, :parts
 
       def initialize(original_value)
-        @value = original_value
-        @parts = value&.split
+        @original_value = original_value
+        @parts = original_value&.split
       end
 
       def length_limit_exceeded?
-        return nil unless value
+        return nil unless original_value
 
-        value.length > LIMIT
+        original_value.length > LIMIT
       end
 
       def disposition
@@ -26,7 +26,7 @@ module Rack
       end
 
       def convert
-        return value if !disposition || !raw_filename
+        return original_value if !disposition || !raw_filename
 
         "#{disposition} filename=\"#{raw_filename}\""
       end
