@@ -6,6 +6,7 @@
 - Rename Rack::ContentDispositionHelper::Converter#long? to Rack::ContentDispositionHelper::Converter#length_limit_exceeded?
 - Rename Rack::ContentDispositionHelper::Converter#raw_filename_value to Rack::ContentDispositionHelper::Converter#convert
 - Rename Rack::ContentDispositionHelper::Converter#value to Rack::ContentDispositionHelper::Converter#original_value
+- Drop support for Ruby 2.6
 
 ## Enhancement:
 

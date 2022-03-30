@@ -25,6 +25,6 @@ Gem::Specification.new do |spec|
     `git ls-files -- lib/*`.split("\n") + %w[CHANGELOG.md MIT-LICENSE README.md]
   end
 
-  spec.required_ruby_version = Gem::Requirement.new('>= 2.6.9')
+  spec.required_ruby_version = Gem::Requirement.new('>= 2.7')
   spec.add_dependency 'rack', '>= 1.0', '< 3'
 end
