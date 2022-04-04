@@ -1,5 +1,7 @@
 # Unreleased
 
+# 0.2.0 - 2022/04/04
+
 ## Breaking Changes:
 
 - Rename Rack::ContentDispositionHelper::ContentDisposition to Rack::ContentDispositionHelper::Converter

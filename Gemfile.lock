@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rack-content_disposition_helper (0.1.0)
+    rack-content_disposition_helper (0.2.0)
       rack (>= 1.0, < 3)
 
 GEM
