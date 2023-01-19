@@ -26,5 +26,5 @@ Gem::Specification.new do |spec|
   end
 
   spec.required_ruby_version = Gem::Requirement.new('>= 2.7')
-  spec.add_dependency 'rack', '>= 1.0', '< 3'
+  spec.add_dependency 'rack', '>= 1.0', '< 4'
 end

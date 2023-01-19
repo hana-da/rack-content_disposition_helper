@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     rack-content_disposition_helper (0.2.0)
-      rack (>= 1.0, < 3)
+      rack (>= 1.0, < 4)
 
 GEM
   remote: https://rubygems.org/
@@ -19,7 +19,7 @@ GEM
       coderay
       parser
       unparser
-    rack (2.2.3.1)
+    rack (3.0.4.1)
     rainbow (3.1.1)
     rake (13.0.6)
     regexp_parser (2.2.1)
