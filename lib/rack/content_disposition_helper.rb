@@ -5,7 +5,7 @@ require 'rack/content_disposition_helper/version'
 require 'rack/content_disposition_helper/user_agent'
 require 'rack/content_disposition_helper/converter'
 
-require 'rack/content_disposition_helper/railtie' if defined?(::Rails::Railtie)
+require 'rack/content_disposition_helper/railtie' if defined?(Rails::Railtie)
 
 module Rack
   class ContentDispositionHelper
